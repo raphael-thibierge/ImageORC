@@ -24,24 +24,33 @@ public class OCREngine {
         listeImg = createListeImage(path);
     }
 
+    /**
+     * Write results of the recognition
+     * @param pathOut path of the result file
+     * @throws IOException
+     */
     public void logOCR(String pathOut) throws IOException {
+        ArrayList<Character> labels = getLabels();
         FileWriter file = new FileWriter(pathOut);
+
         file.write("Test effectué le " + new Date().toString() + "\r\n\r\n   ");
+        for (Character c : labels){
+            file.write("   " + c);
+        }
 
         HashMap<Character, HashMap<Character,Integer>> confusion = new HashMap<Character, HashMap<Character, Integer>>();
-        ArrayList<Character> labels = getLabels();
 
+        // Initialization of confusion matrix
         for(Character character : labels){
             HashMap<Character, Integer> list = new HashMap<Character, Integer>();
             for (Character c : labels){
                 list.put(c, 0);
             }
             confusion.put(character, list);
-
-            file.write("   " + character);
         }
         file.write("\r\n\r\n");
 
+        // we fill the confusion matrix ( compare label and decision )
         int nb_true = 0;
         for(OCRImage ocrImage : listeImg){
             HashMap<Character, Integer> results = confusion.get(ocrImage.getLabel());
@@ -51,6 +60,7 @@ public class OCREngine {
             }
         }
 
+        // we write the results of the recognition
         for(Character c : labels){
             file.write(c + " :   ");
             HashMap<Character, Integer> values = confusion.get(c);
@@ -61,8 +71,8 @@ public class OCREngine {
         }
         file.write("\r\n");
 
+        // we compute recognition 
         double taux = ((double)nb_true / listeImg.size()) * 100;
-
         file.write("Le taux de reconnaissance est de : " + taux + "%");
 
         file.close();
@@ -101,7 +111,13 @@ public class OCREngine {
         return imageList;
     }
 
-    public static void resize(ImagePlus img,int larg,int haut) {
+    /**
+     * Resize an image
+     * @param img image to resize
+     * @param larg new width
+     * @param haut new heigth
+     */
+    public static void resize(ImagePlus img, int larg, int haut) {
         ImageProcessor ip2 = img.getProcessor();
         ip2.setInterpolate(true);
         ip2 = ip2.resize(larg, haut);
@@ -130,6 +146,9 @@ public class OCREngine {
         }
     }
 
+    /**
+     * Set feature caracteristic vector for all reference images
+     */
     private void setImgReferenceDataBase(){
         listeImgReference = createListeImage(path);
         for (OCRImage image : listeImgReference){
@@ -137,6 +156,9 @@ public class OCREngine {
         }
     }
 
+    /**
+     * Apply a decision to the images
+     */
     public void makeDecisionOnImageList(){
         setFeatureNdgVect();
 
@@ -152,6 +174,11 @@ public class OCREngine {
         }
     }
 
+    /**
+     * Find index of the same file in the references
+     * @param image image to find
+     * @return index of image
+     */
     private int computeExcept(OCRImage image){
         for (int i = 0; i < listeImgReference.size(); i++) {
             if (listeImgReference.get(i).getPath().equals(image.getPath())){
