@@ -6,31 +6,37 @@ import java.util.ArrayList;
 
 public class OCRImage {
 
-    /*
-    contenu de l'image
+    /**
+     * Image content
      */
     private ImagePlus img;
 
-    /*
-    label de l'image (donné par le nom du fichier -> 0,1,.. ou 9)
+    /**
+     * Image label, given by file name.-> +, -, 0, 1 ... 0
      */
     private char label;
 
-    /*
-    path du fichier image
+    /**
+     * File path
      */
     private String path;
 
-    /*
-    affectation du label après affectation
+    /**
+     * new label after analyse
      */
     private char decision;
 
-    /*
-    vecteur de caractéristiques de l'image
+    /**
+     * features vector
      */
     private ArrayList<Double> vect;
 
+    /**
+     * Constructor
+     * @param img image's content
+     * @param label image's label
+     * @param path image's path
+     */
     public OCRImage(final ImagePlus img, final char label, final String path) {
         this.img = img;
         this.label = label;
@@ -58,47 +64,43 @@ public class OCRImage {
      * Initialize or update the vector of features
      */
     public void setFeatureNdg(){
-        if (vect == null){
-            vect = new ArrayList<>();
-            vect.add(averageNdg());
-        } else {
-            vect.set(0, averageNdg());
-        }
+        vect = new ArrayList<>();
+        vect.add(averageNdg());
     }
 
-    public void setImg(final ImagePlus img){
-        this.img = img;
-    }
-
-    public ImagePlus getImg(){
-        return img;
-    }
-
-    public void setVect(int i, double val){
-        this.vect.set(i,val);
-    }
-
-    public Double getVectFeature(int i){
-        return vect.get(i);
-    }
-
+    /**
+     * Anemic getter
+     * @return features vector
+     */
     public ArrayList<Double> getVect() {
         return vect;
     }
 
+    /**
+     * Anemic getter
+     * @return label
+     */
     public Character getLabel(){return label;}
 
+    /**
+     * Anemic getter
+     * @return decision
+     */
     public Character getDecision(){return decision;}
 
+    /**
+     * Anemic getter
+     * @return getter
+     */
     public String getPath() {
         return path;
     }
 
+    /**
+     * Anemic setter
+     * @param decision char found decision
+     */
     public void setDecision(char decision) {
         this.decision = decision;
-    }
-
-    public void setAsReference() {
-        decision = label;
     }
 }
