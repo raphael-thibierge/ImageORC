@@ -75,8 +75,12 @@ public class OCREngine {
         return labels;
     }
 
-    public void createListeImage(String path) {
-        listeImg = new ArrayList<OCRImage>();
+    /**
+     * Load images in directory path
+     * @param path directory path where images are stored
+     */
+    public void createListeImage(final String path) {
+        listeImg = new ArrayList<>();
 
         File[] files = listFiles(path);
         if (files.length != 0)
@@ -91,7 +95,12 @@ public class OCREngine {
         }
     }
 
-    public static File[] listFiles(String directoryPath){
+    /**
+     * Get file list contained in directory path
+     * @param directoryPath path where files are stored
+     * @return files list
+     */
+    private static File[] listFiles(final String directoryPath){
         File[] files = null;
         File directoryToScan = new File(directoryPath);
         files = directoryToScan.listFiles();
