@@ -6,11 +6,30 @@ import java.util.ArrayList;
 
 public class OCRImage {
 
-    private ImagePlus img; //contenu de l’image
-    private char label; //correspond au label de l’image (donne par le nom du fichier --> 0,1,... ou 9)
-    private String path; //path du fichier image
-    private char decision; //affectation du label apres classification
-    private ArrayList<Double> vect; //Vecteur de caracteristiques de l’image
+    /*
+    contenu de l'image
+     */
+    private ImagePlus img;
+
+    /*
+    label de l'image (donné par le nom du fichier -> 0,1,.. ou 9)
+     */
+    private char label;
+
+    /*
+    path du fichier image
+     */
+    private String path;
+
+    /*
+    affectation du label après affectation
+     */
+    private char decision;
+
+    /*
+    vecteur de caractéristiques de l'image
+     */
+    private ArrayList<Double> vect;
 
     public OCRImage(ImagePlus img, char label, String path) {
         this.img = img;
