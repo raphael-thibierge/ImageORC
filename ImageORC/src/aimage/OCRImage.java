@@ -35,6 +35,11 @@ public class OCRImage {
         this.img = img;
         this.label = label;
         this.path = path;
+
+        int val=(int)(Math.random()*10.0);
+        String i = Integer.toString(val);
+        char a = i.charAt(0);
+        this.decision=(char)a;
     }
 
     public void setImg(ImagePlus img){
@@ -52,5 +57,9 @@ public class OCRImage {
     public Double getVect(int i){
         return vect.get(i);
     }
+
+    public Character getLabel(){return label;}
+
+    public Character getDecision(){return decision;}
 
 }

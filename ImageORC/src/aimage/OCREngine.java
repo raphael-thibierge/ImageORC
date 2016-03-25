@@ -4,7 +4,11 @@ import ij.ImagePlus;
 import ij.process.ImageConverter;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 
 public class OCREngine {
 
@@ -16,6 +20,60 @@ public class OCREngine {
     public OCREngine(){
         createListeImage(AlexisPath);
         //createListeImage(RaphaelPath);
+    }
+
+    public void logOCR(String pathOut) throws IOException {
+        FileWriter file = new FileWriter(pathOut);
+        file.write("Test effectué le " + new Date().toString() + "\r\n\r\n   ");
+
+        HashMap<Character, HashMap<Character,Integer>> confusion = new HashMap<Character, HashMap<Character, Integer>>();
+        ArrayList<Character> labels = getLabels();
+
+        for(Character character : labels){
+            HashMap<Character, Integer> list = new HashMap<Character, Integer>();
+            for (Character c : labels){
+                list.put(c, 0);
+            }
+            confusion.put(character, list);
+
+            file.write("   " + character);
+        }
+        file.write("\r\n\r\n");
+
+        int nb_true = 0;
+        for(OCRImage ocrImage : listeImg){
+            HashMap<Character, Integer> results = confusion.get(ocrImage.getLabel());
+            results.put(ocrImage.getDecision(), results.get(ocrImage.getDecision()) + 1);
+            if(ocrImage.getLabel() == ocrImage.getDecision()){
+                nb_true++;
+            }
+        }
+
+        for(Character c : labels){
+            file.write(c + " :   ");
+            HashMap<Character, Integer> values = confusion.get(c);
+            for (Character c2 : labels){
+                file.write(values.get(c2) + "   ");
+            }
+            file.write("\r\n");
+        }
+        file.write("\r\n");
+
+        double taux = ((double)nb_true / listeImg.size()) * 100;
+
+        file.write("Le taux de reconnaissance est de : " + taux + "%");
+
+        file.close();
+    }
+
+    public ArrayList<Character> getLabels(){
+        ArrayList<Character> labels = new ArrayList<Character>();
+        for(OCRImage ocr : listeImg){
+            if(!labels.contains(ocr.getLabel())){
+                labels.add(ocr.getLabel());
+            }
+        }
+        return labels;
     }
 
     public void createListeImage(String path) {
