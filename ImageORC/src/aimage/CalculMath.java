@@ -40,17 +40,21 @@ public class CalculMath {
      * @return
      */
     public static int PPV(final ArrayList<Double> vect, final ArrayList<ArrayList <Double>> tabVect, final int except){
-
         // index to return
-        int indexSaved = Integer.MAX_VALUE;
+        int index = 0;
+        double tmpDistance = Integer.MAX_VALUE;
         // compare all vectors
         for (int i = 0; i < tabVect.size(); i++) {
-            if (i != except && distEucli(tabVect.get(i), vect) < indexSaved){
-                indexSaved = i;
+            // compute distance
+            double distance = distEucli(tabVect.get(i), vect);
+            // compare
+            if (i != except && distance < tmpDistance){
+                tmpDistance = distance;
+                index = i;
             }
         }
 
-        return indexSaved;
+        return index;
     }
 
 }
