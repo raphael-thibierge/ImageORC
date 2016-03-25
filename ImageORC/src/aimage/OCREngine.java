@@ -12,13 +12,15 @@ import java.util.HashMap;
 
 public class OCREngine {
 
+    private ArrayList<OCRImage> listeImgReference;
     private ArrayList<OCRImage> listeImg;
 
     private String path;
 
     public OCREngine(String path){
         this.path = path;
-        createListeImage(path);
+        setImgReferenceDataBase();
+        listeImg = createListeImage(path);
     }
 
     public void logOCR(String pathOut) throws IOException {
@@ -79,8 +81,8 @@ public class OCREngine {
      * Load images in directory path
      * @param path directory path where images are stored
      */
-    public void createListeImage(final String path) {
-        listeImg = new ArrayList<>();
+    public ArrayList<OCRImage> createListeImage(final String path) {
+        ArrayList<OCRImage> imageList = new ArrayList<>();
 
         File[] files = listFiles(path);
         if (files.length != 0)
@@ -88,11 +90,13 @@ public class OCREngine {
             for (File file : files) {
                 ImagePlus tempImg = new ImagePlus(file.getAbsolutePath());
                 new ImageConverter(tempImg).convertToGray8();
-                listeImg.add(new OCRImage(tempImg,
+                OCRImage image = new OCRImage(tempImg,
                         file.getName().substring(0, 1).charAt(0),
-                        file.getAbsolutePath()));
+                        file.getAbsolutePath());
+                imageList.add(image);
             }
         }
+        return imageList;
     }
 
     /**
@@ -115,6 +119,37 @@ public class OCREngine {
         for (int i = 0; i < listeImg.size(); i++) {
             listeImg.get(i).setFeatureNdg();
         }
+    }
+
+    private void setImgReferenceDataBase(){
+        listeImgReference = createListeImage(path);
+        for (OCRImage image : listeImgReference){
+            image.setFeatureNdg();
+        }
+    }
+
+    public void makeDecisionOnImageList(){
+        setFeatureNdgVect();
+
+        ArrayList<ArrayList<Double>> ref = new ArrayList<>();
+        for (OCRImage referenceImage : listeImgReference) {
+            ref.add(referenceImage.getVect());
+        }
+
+        for (OCRImage image : listeImg) {
+            int except = computeExcept(image);
+            int decision = CalculMath.PPV(image.getVect(), ref, except);
+            image.setDecision(listeImgReference.get(decision).getLabel());
+        }
+    }
+
+    private int computeExcept(OCRImage image){
+        for (int i = 0; i < listeImgReference.size(); i++) {
+            if (listeImgReference.get(i).getPath().equals(image.getPath())){
+                return i;
+            }
+        }
+        return -1;
     }
 
 }

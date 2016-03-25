@@ -83,12 +83,27 @@ public class OCRImage {
         this.vect.set(i,val);
     }
 
-    public Double getVect(int i){
+    public Double getVectFeature(int i){
         return vect.get(i);
+    }
+
+    public ArrayList<Double> getVect() {
+        return vect;
     }
 
     public Character getLabel(){return label;}
 
     public Character getDecision(){return decision;}
 
+    public String getPath() {
+        return path;
+    }
+
+    public void setDecision(char decision) {
+        this.decision = decision;
+    }
+
+    public void setAsReference() {
+        decision = label;
+    }
 }

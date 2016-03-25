@@ -16,6 +16,7 @@ public class Main {
         OCREngine ocrEngine = new OCREngine(pathDefault);
 
         try {
+            ocrEngine.makeDecisionOnImageList();
             ocrEngine.logOCR("out/test.txt");
         } catch (IOException e) {
             e.printStackTrace();
@@ -23,4 +24,4 @@ public class Main {
 
     }
 
-}
+    }
