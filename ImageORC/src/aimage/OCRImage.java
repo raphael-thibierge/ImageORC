@@ -54,6 +54,18 @@ public class OCRImage {
         return sum/(double)pixels.length;
     }
 
+    /**
+     * Initialize or update the vector of features
+     */
+    public void setFeatureNdg(){
+        if (vect == null){
+            vect = new ArrayList<>();
+            vect.add(averageNdg());
+        } else {
+            vect.set(0, averageNdg());
+        }
+    }
+
     public void setImg(final ImagePlus img){
         this.img = img;
     }
