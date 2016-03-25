@@ -99,4 +99,14 @@ public class OCREngine {
         return files;
     }
 
+    /**
+     * Set feature caracteristic vector for all images from listeImage
+     */
+    public void setFeatureNdgVect()
+    {
+        for (int i = 0; i < listeImg.size(); i++) {
+            listeImg.get(i).setFeatureNdg();
+        }
+    }
+
 }
