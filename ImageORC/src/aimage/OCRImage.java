@@ -31,13 +31,30 @@ public class OCRImage {
      */
     private ArrayList<Double> vect;
 
-    public OCRImage(ImagePlus img, char label, String path) {
+    public OCRImage(final ImagePlus img, final char label, final String path) {
         this.img = img;
         this.label = label;
         this.path = path;
     }
 
-    public void setImg(ImagePlus img){
+    /**
+     * Compute average from img binarized
+     * @return average
+     */
+    public double averageNdg(){
+        // get pixels
+        byte[] pixels = (byte[]) img.getProcessor().getPixels();
+
+        double sum = 0;
+        // sum of all pixels
+        for (int i = 0; i < pixels.length; i++) {
+            sum += pixels[i] & 0xff;
+        }
+
+        return sum/(double)pixels.length;
+    }
+
+    public void setImg(final ImagePlus img){
         this.img = img;
     }
 
