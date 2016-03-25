@@ -10,20 +10,26 @@ public class OCREngine {
 
     private ArrayList<OCRImage> listeImg;
 
+    private static String AlexisPath = "/Users/alexis/ImageORC/ImageORC/images";
+    //private static String RaphaelPath = "";
+
     public OCREngine(){
-        createListeImage("images");
+        createListeImage(AlexisPath);
+        //createListeImage(RaphaelPath);
     }
 
     public void createListeImage(String path) {
-        File[] files=listFiles(path);
-        if (files.length!=0)
+        listeImg = new ArrayList<OCRImage>();
+
+        File[] files = listFiles(path);
+        if (files.length != 0)
         {
-            for (int i=0;i <files.length;i++){
-                ImagePlus tempImg = new ImagePlus(files[i].getAbsolutePath());
+            for (File file : files) {
+                ImagePlus tempImg = new ImagePlus(file.getAbsolutePath());
                 new ImageConverter(tempImg).convertToGray8();
-                listeImg.add(new OCRImage(tempImg ,
-                    files[i].getName().substring(0,1).charAt(0),
-                    files[i].getAbsolutePath()));
+                listeImg.add(new OCRImage(tempImg,
+                        file.getName().substring(0, 1).charAt(0),
+                        file.getAbsolutePath()));
             }
         }
     }
