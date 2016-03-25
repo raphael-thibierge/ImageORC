@@ -2,6 +2,7 @@ package aimage;
 
 import ij.ImagePlus;
 import ij.process.ImageConverter;
+import ij.process.ImageProcessor;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -88,11 +89,19 @@ public class OCREngine {
             for (File file : files) {
                 ImagePlus tempImg = new ImagePlus(file.getAbsolutePath());
                 new ImageConverter(tempImg).convertToGray8();
+                resize(tempImg, 20, 20);
                 listeImg.add(new OCRImage(tempImg,
                         file.getName().substring(0, 1).charAt(0),
                         file.getAbsolutePath()));
             }
         }
+    }
+
+    public static void resize(ImagePlus img,int larg,int haut) {
+        ImageProcessor ip2 = img.getProcessor();
+        ip2.setInterpolate(true);
+        ip2 = ip2.resize(larg, haut);
+        img.setProcessor(null, ip2);
     }
 
     /**
