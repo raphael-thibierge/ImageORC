@@ -6,10 +6,17 @@ public class Main {
 
     public static void main(String[] args){
 
-        OCREngine ocrEngine = new OCREngine();
+        String alexisPath = "/Users/alexis/ImageORC/ImageORC/images";
+        String raphaelPath = "/Users/raphael/Documents/DUT-Info/S4/S4_Image/projet/ImageORC/images";
+        String pathDefault = alexisPath;
+        if (args[0].equals("1")){
+            pathDefault = raphaelPath;
+        }
+
+        OCREngine ocrEngine = new OCREngine(pathDefault);
 
         try {
-            ocrEngine.logOCR("test.txt");
+            ocrEngine.logOCR("out/test.txt");
         } catch (IOException e) {
             e.printStackTrace();
         }

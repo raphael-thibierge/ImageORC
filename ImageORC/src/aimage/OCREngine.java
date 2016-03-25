@@ -14,14 +14,11 @@ public class OCREngine {
 
     private ArrayList<OCRImage> listeImg;
 
-    private static final String AlexisPath = "/Users/alexis/ImageORC/ImageORC/images";
-    private static final String RaphaelPath = "/Users/raphael/Documents/DUT-Info/S4/S4_Image/projet/ImageORC/images";
+    private String path;
 
-    private static String path = RaphaelPath;
-
-    public OCREngine(){
+    public OCREngine(String path){
+        this.path = path;
         createListeImage(path);
-        //createListeImage(RaphaelPath);
     }
 
     public void logOCR(String pathOut) throws IOException {
