@@ -17,7 +17,7 @@ public class CalculMath {
      * @param vect2 second vector
      * @return result
      */
-    public static double distEucli(ArrayList<Double> vect1, ArrayList<Double> vect2){
+    public static double distEucli(final ArrayList<Double> vect1, final ArrayList<Double> vect2){
         // check vectors size
         if (vect1.size() != vect2.size()){
             throw new InvalidParameterException("vect1 and vect2 don't have the same size");
@@ -30,6 +30,31 @@ public class CalculMath {
         }
 
         return sqrt(result);
+    }
+
+    /**
+     *
+     * @param vect reference vector
+     * @param tabVect array of vector to compare with
+     * @param except index of vector from tabVect that will not be compare with vect
+     * @return
+     */
+    public static int PPV(final ArrayList<Double> vect, final ArrayList<ArrayList <Double>> tabVect, final int except){
+        // index to return
+        int index = 0;
+        double tmpDistance = Integer.MAX_VALUE;
+        // compare all vectors
+        for (int i = 0; i < tabVect.size(); i++) {
+            // compute distance
+            double distance = distEucli(tabVect.get(i), vect);
+            // compare
+            if (i != except && distance < tmpDistance){
+                tmpDistance = distance;
+                index = i;
+            }
+        }
+
+        return index;
     }
 
 }

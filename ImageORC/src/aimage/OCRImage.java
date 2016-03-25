@@ -31,7 +31,7 @@ public class OCRImage {
      */
     private ArrayList<Double> vect;
 
-    public OCRImage(ImagePlus img, char label, String path) {
+    public OCRImage(final ImagePlus img, final char label, final String path) {
         this.img = img;
         this.label = label;
         this.path = path;
@@ -42,7 +42,36 @@ public class OCRImage {
         this.decision=(char)a;
     }
 
-    public void setImg(ImagePlus img){
+    /**
+     * Compute average from img binarized
+     * @return average
+     */
+    public double averageNdg(){
+        // get pixels
+        byte[] pixels = (byte[]) img.getProcessor().getPixels();
+
+        double sum = 0;
+        // sum of all pixels
+        for (int i = 0; i < pixels.length; i++) {
+            sum += pixels[i] & 0xff;
+        }
+
+        return sum/(double)pixels.length;
+    }
+
+    /**
+     * Initialize or update the vector of features
+     */
+    public void setFeatureNdg(){
+        if (vect == null){
+            vect = new ArrayList<>();
+            vect.add(averageNdg());
+        } else {
+            vect.set(0, averageNdg());
+        }
+    }
+
+    public void setImg(final ImagePlus img){
         this.img = img;
     }
 
