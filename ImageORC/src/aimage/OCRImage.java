@@ -56,6 +56,7 @@ public class OCRImage {
             for(int j = 0; j < img.getWidth(); j++){
                 average += pixels[i * img.getWidth() + j] & 0xff;
             }
+            average = average / img.getWidth();
             profilH.add(average);
         }
 
@@ -75,6 +76,7 @@ public class OCRImage {
             for(int j = 0; j < img.getHeight(); j++){
                 average += pixels[i + j * img.getWidth()] & 0xff;
             }
+            average = average / img.getHeight();
             profilV.add(average);
         }
 
