@@ -98,19 +98,31 @@ public class OCRImage {
         double perimeter = 0.0, surface = 0.0;
         byte[] pixels = (byte[]) img.getProcessor().getPixels();
 
+        // compute surface
         for (byte pixel : pixels) {
             if((pixel & 0xff) != 255 ){
                 surface += 1.0;
             }
         }
 
+        // compute perimeter
         for(int i=0; i<img.getHeight(); i++){
             for(int j=0; j<img.getWidth(); j++){
-
-                if(true){
-
+                int pos = i*img.getWidth() + j;
+                // check if pixel is black
+                if( (pixels[pos] & 0xff) == 0){
+                    // we look around it to find white pixel
+                    boolean find = false;
+                    for(int x=-1; x<=1 && !find; x++){
+                        for(int y=-1; y<=1 && !find; y++){
+                            int pos2 = (i+x)*img.getWidth() + (j+y);
+                            if((pixels[pos2] & 0xff) == 255){
+                                find = true;
+                                perimeter += 1.0;
+                            }
+                        }
+                    }
                 }
-
             }
         }
 
