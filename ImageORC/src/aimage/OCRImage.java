@@ -92,6 +92,35 @@ public class OCRImage {
     }
 
     /**
+     * Set the vector of features using isoperimeter report
+     */
+    public void rapportIso(){
+        double perimeter = 0.0, surface = 0.0;
+        byte[] pixels = (byte[]) img.getProcessor().getPixels();
+
+        for (byte pixel : pixels) {
+            if((pixel & 0xff) != 255 ){
+                surface += 1.0;
+            }
+        }
+
+        for(int i=0; i<img.getHeight(); i++){
+            for(int j=0; j<img.getWidth(); j++){
+
+                if(true){
+
+                }
+
+            }
+        }
+
+        double r = perimeter * (4 * Math.PI * surface);
+
+        vect = new ArrayList<>();
+        vect.add(r);
+    }
+
+    /**
      * Compute average from img binarized
      * @return average
      */
