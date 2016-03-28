@@ -147,12 +147,22 @@ public class OCREngine {
     }
 
     /**
+     * Set feature caracteristic vector for all images from listeImage (Profile method)
+     */
+    public void setFeatureHVVect(){
+        for(OCRImage image : listeImg){
+            image.setFeatureProfilHV();
+        }
+    }
+
+    /**
      * Set feature caracteristic vector for all reference images
      */
     private void setImgReferenceDataBase(){
         listeImgReference = createListeImage(path);
         for (OCRImage image : listeImgReference){
-            image.setFeatureNdg();
+            //image.setFeatureNdg();
+            image.setFeatureProfilHV();
         }
     }
 
@@ -160,7 +170,8 @@ public class OCREngine {
      * Apply a decision to the images
      */
     public void makeDecisionOnImageList(){
-        setFeatureNdgVect();
+        //setFeatureNdgVect();
+        setFeatureHVVect();
 
         ArrayList<ArrayList<Double>> ref = new ArrayList<>();
         for (OCRImage referenceImage : listeImgReference) {

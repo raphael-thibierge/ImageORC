@@ -44,6 +44,54 @@ public class OCRImage {
     }
 
     /**
+     * Compute average of each horizontal line
+     * @return a vector with all averages
+     */
+    public ArrayList<Double> getProfilH(){
+        ArrayList<Double> profilH = new ArrayList<>();
+        byte[] pixels = (byte[]) img.getProcessor().getPixels();
+
+        for(int i=0; i < img.getHeight(); i++){
+            double average = 0.0;
+            for(int j = 0; j < img.getWidth(); j++){
+                average += pixels[i * img.getWidth() + j] & 0xff;
+            }
+            profilH.add(average);
+        }
+
+        return profilH;
+    }
+
+    /**
+     * Compute average of each vertical line
+     * @return a vector with all averages
+     */
+    public ArrayList<Double> getProfilV(){
+        ArrayList<Double> profilV = new ArrayList<>();
+        byte[] pixels = (byte[]) img.getProcessor().getPixels();
+
+        for(int i=0; i < img.getWidth(); i++){
+            double average = 0.0;
+            for(int j = 0; j < img.getHeight(); j++){
+                average += pixels[i + j * img.getWidth()] & 0xff;
+            }
+            profilV.add(average);
+        }
+
+        return profilV;
+    }
+
+    /**
+     * Set the vector of features with vertical profile and horizontal profile
+     */
+    public void setFeatureProfilHV(){
+        vect = new ArrayList<>();
+
+        vect.addAll(getProfilV());
+        vect.addAll(getProfilH());
+    }
+
+    /**
      * Compute average from img binarized
      * @return average
      */
