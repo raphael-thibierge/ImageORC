@@ -105,13 +105,13 @@ public class OCRImage {
 
         // compute surface
         for (byte pixel : pixels) {
-            if((pixel & 0xff) < 230 ){
+            if((pixel & 0xff) != 255 ){
                 surface += 1.0;
             }
         }
 
         // compute perimeter
-        for(int i=0; i<img.getWidth(); i++){
+        /*for(int i=0; i<img.getWidth(); i++){
             for(int j=0; j<img.getHeight(); j++){
                 // check if pixel is black
                 if( getP(i,j) < 40){
@@ -125,6 +125,16 @@ public class OCRImage {
                             }
                         }
                     }
+                }
+            }
+        }*/
+
+        for(int i=0; i<pixels.length; i++){
+            if((pixels[i] & 0xff) < 40){
+                if(i-1 >= 0 && (pixels[i-1] & 0xff) > 230){
+                    perimeter += 1.0;
+                } else if(i+1 < pixels.length && (pixels[i+1] & 0xff) > 230){
+                    perimeter += 1.0;
                 }
             }
         }
