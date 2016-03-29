@@ -101,11 +101,12 @@ public class OCRImage {
      */
     public void rapportIso(){
         double perimeter = 0.0, surface = 0.0;
+        int threshold = 230;
         refreshPixelsArray();
 
         // compute surface
         for (byte pixel : pixels) {
-            if((pixel & 0xff) != 255 ){
+            if((pixel & 0xff) > threshold){
                 surface += 1.0;
             }
         }
@@ -114,12 +115,13 @@ public class OCRImage {
         for(int i=0; i<img.getWidth(); i++){
             for(int j=0; j<img.getHeight(); j++){
                 // check if pixel is not white (grey)
-                if( getP(i,j) < 255){
+                if( getP(i,j) < threshold){
                     // we look around it to find white pixel
                     boolean find = false;
                     for(int x=-1; x<=1 && !find; x++){
                         for(int y=-1; y<=1 && !find; y++){
-                            if( i+x >= 0 && i+x < img.getWidth() && j+y >= 0 && j+y < img.getHeight() && getP(i+x, j+y) == 255){
+                            if( i+x >= 0 && i+x < img.getWidth() && j+y >= 0 && j+y < img.getHeight()
+                                    && getP(i+x, j+y) >= threshold){
                                 find = true;
                                 perimeter += 1.0;
                             }
