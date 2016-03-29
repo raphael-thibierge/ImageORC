@@ -99,13 +99,15 @@ public class OCREngine {
         if (files.length != 0)
         {
             for (File file : files) {
-                ImagePlus tempImg = new ImagePlus(file.getAbsolutePath());
-                new ImageConverter(tempImg).convertToGray8();
-                resize(tempImg, 20, 20);
-                OCRImage image = new OCRImage(tempImg,
-                        file.getName().substring(0, 1).charAt(0),
-                        file.getAbsolutePath());
-                imageList.add(image);
+                if(!file.getName().equals(".DS_Store")) {
+                    ImagePlus tempImg = new ImagePlus(file.getAbsolutePath());
+                    new ImageConverter(tempImg).convertToGray8();
+                    resize(tempImg, 20, 20);
+                    OCRImage image = new OCRImage(tempImg,
+                            file.getName().substring(0, 1).charAt(0),
+                            file.getAbsolutePath());
+                    imageList.add(image);
+                }
             }
         }
         return imageList;

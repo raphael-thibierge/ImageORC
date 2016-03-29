@@ -32,6 +32,11 @@ public class OCRImage {
     private ArrayList<Double> vect;
 
     /**
+     * pixels of the image
+     */
+    private byte[] pixels;
+
+    /**
      * Constructor
      * @param img image's content
      * @param label image's label
@@ -96,27 +101,25 @@ public class OCRImage {
      */
     public void rapportIso(){
         double perimeter = 0.0, surface = 0.0;
-        byte[] pixels = (byte[]) img.getProcessor().getPixels();
+        refreshPixelsArray();
 
         // compute surface
         for (byte pixel : pixels) {
-            if((pixel & 0xff) != 255 ){
+            if((pixel & 0xff) < 230 ){
                 surface += 1.0;
             }
         }
 
         // compute perimeter
-        for(int i=0; i<img.getHeight(); i++){
-            for(int j=0; j<img.getWidth(); j++){
-                int pos = i*img.getWidth() + j;
+        for(int i=0; i<img.getWidth(); i++){
+            for(int j=0; j<img.getHeight(); j++){
                 // check if pixel is black
-                if( (pixels[pos] & 0xff) == 0){
+                if( getP(i,j) < 40){
                     // we look around it to find white pixel
                     boolean find = false;
                     for(int x=-1; x<=1 && !find; x++){
                         for(int y=-1; y<=1 && !find; y++){
-                            int pos2 = (i+x)*img.getWidth() + (j+y);
-                            if((pixels[pos2] & 0xff) == 255){
+                            if( i+x >= 0 && i+x < img.getWidth() && j+y >= 0 && j+y < img.getHeight() && getP(i+x, j+y) > 230){
                                 find = true;
                                 perimeter += 1.0;
                             }
@@ -126,10 +129,18 @@ public class OCRImage {
             }
         }
 
-        double r = perimeter * (4 * Math.PI * surface);
+        double r = perimeter / (4.0 * Math.PI * surface);
 
         vect = new ArrayList<>();
         vect.add(r);
+    }
+
+    public void refreshPixelsArray(){
+        pixels = (byte[]) img.getProcessor().getPixels();
+    }
+
+    public int getP(int i, int j){
+        return pixels[j*img.getWidth() + i] & 0xff;
     }
 
     /**
