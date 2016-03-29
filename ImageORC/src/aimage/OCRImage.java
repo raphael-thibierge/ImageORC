@@ -111,30 +111,20 @@ public class OCRImage {
         }
 
         // compute perimeter
-        /*for(int i=0; i<img.getWidth(); i++){
+        for(int i=0; i<img.getWidth(); i++){
             for(int j=0; j<img.getHeight(); j++){
-                // check if pixel is black
-                if( getP(i,j) < 40){
+                // check if pixel is not white (grey)
+                if( getP(i,j) < 255){
                     // we look around it to find white pixel
                     boolean find = false;
                     for(int x=-1; x<=1 && !find; x++){
                         for(int y=-1; y<=1 && !find; y++){
-                            if( i+x >= 0 && i+x < img.getWidth() && j+y >= 0 && j+y < img.getHeight() && getP(i+x, j+y) > 230){
+                            if( i+x >= 0 && i+x < img.getWidth() && j+y >= 0 && j+y < img.getHeight() && getP(i+x, j+y) == 255){
                                 find = true;
                                 perimeter += 1.0;
                             }
                         }
                     }
-                }
-            }
-        }*/
-
-        for(int i=0; i<pixels.length; i++){
-            if((pixels[i] & 0xff) < 40){
-                if(i-1 >= 0 && (pixels[i-1] & 0xff) > 230){
-                    perimeter += 1.0;
-                } else if(i+1 < pixels.length && (pixels[i+1] & 0xff) > 230){
-                    perimeter += 1.0;
                 }
             }
         }
