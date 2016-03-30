@@ -101,12 +101,12 @@ public class OCRImage {
      */
     public void rapportIso(){
         double perimeter = 0.0, surface = 0.0;
-        int threshold = 230;
         refreshPixelsArray();
+        binarize(220);
 
         // compute surface
         for (byte pixel : pixels) {
-            if((pixel & 0xff) > threshold){
+            if((pixel & 0xff) == 0){
                 surface += 1.0;
             }
         }
@@ -114,14 +114,14 @@ public class OCRImage {
         // compute perimeter
         for(int i=0; i<img.getWidth(); i++){
             for(int j=0; j<img.getHeight(); j++){
-                // check if pixel is not white (grey)
-                if( getP(i,j) < threshold){
+                // check if pixel is black
+                if( getP(i,j) == 0){
                     // we look around it to find white pixel
                     boolean find = false;
                     for(int x=-1; x<=1 && !find; x++){
                         for(int y=-1; y<=1 && !find; y++){
                             if( i+x >= 0 && i+x < img.getWidth() && j+y >= 0 && j+y < img.getHeight()
-                                    && getP(i+x, j+y) >= threshold){
+                                    && getP(i+x, j+y) == 255){
                                 find = true;
                                 perimeter += 1.0;
                             }
@@ -137,12 +137,48 @@ public class OCRImage {
         vect.add(r);
     }
 
+    /**
+     * binarize array of pixels
+     * @param threshold
+     */
+    public void binarize(int threshold){
+        for (int i=0; i < img.getWidth(); i++){
+            for (int j = 0; j < img.getHeight(); j++) {
+                int pix = getP(i,j);
+
+                if(pix < threshold){
+                    setP(i,j, 0);
+                } else {
+                    setP(i,j,255);
+                }
+
+            }
+        }
+    }
+
+    /**
+     * load the array of image's pixels
+     */
     public void refreshPixelsArray(){
         pixels = (byte[]) img.getProcessor().getPixels();
     }
 
+    /**
+     * @param i column
+     * @param j line
+     * @return value of the pixel
+     */
     public int getP(int i, int j){
         return pixels[j*img.getWidth() + i] & 0xff;
+    }
+
+    /**
+     * @param i colum
+     * @param j line
+     * @param value new value of the pixel
+     */
+    public void setP(int i, int j, int value){
+        pixels[j*img.getWidth() + i] = (byte) value;
     }
 
     /**
