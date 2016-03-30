@@ -6,6 +6,7 @@ public class Main {
 
     public static void main(String[] args){
 
+        // put you absolute path to the images here
         String alexisPath = "/Users/alexis/ImageORC/ImageORC/images";
         String raphaelPath = "/Users/raphael/Documents/DUT-Info/S4/S4_Image/projet/ImageORC/images";
         String pathDefault = alexisPath;

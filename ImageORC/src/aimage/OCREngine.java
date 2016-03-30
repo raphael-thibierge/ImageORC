@@ -157,6 +157,9 @@ public class OCREngine {
         }
     }
 
+    /**
+     * Set feature caracteristic vector for all images from listeImage (Isoperimeter method)
+     */
     public void setIsoperimeter(){
         for (OCRImage image : listeImg){
             image.rapportIso();
@@ -170,8 +173,8 @@ public class OCREngine {
         listeImgReference = createListeImage(path);
         for (OCRImage image : listeImgReference){
             //image.setFeatureNdg();
-            //image.setFeatureProfilHV();
-            image.rapportIso();
+            image.setFeatureProfilHV();
+            //image.rapportIso();
         }
     }
 
@@ -180,8 +183,8 @@ public class OCREngine {
      */
     public void makeDecisionOnImageList(){
         //setFeatureNdgVect();
-        //setFeatureHVVect();
-        setIsoperimeter();
+        setFeatureHVVect();
+        //setIsoperimeter();
 
         ArrayList<ArrayList<Double>> ref = new ArrayList<>();
         for (OCRImage referenceImage : listeImgReference) {
