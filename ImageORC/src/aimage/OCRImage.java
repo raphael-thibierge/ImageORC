@@ -200,6 +200,43 @@ public class OCRImage {
         return sum/(double)pixels.length;
     }
 
+
+    public void zonning(){
+
+        byte[] pixels = (byte[]) img.getProcessor().getPixels();
+
+        // make 9 zone of the image ( 3x3 )
+        int nbZones = 3;
+        int size = pixels.length / nbZones;
+        if (size * nbZones < pixels.length){
+            size += 1;
+        }
+
+        // average on each zone
+        ArrayList<Double> result = new ArrayList<>();
+        for (int i = 0; i < nbZones; i++){
+
+            double sum = 0;
+            int cpt = 0;
+            for (int j = 0; j < size; j++) {
+                int index = i*size+j;
+                if (pixels.length > index){
+                    sum += pixels[index] & 0xff;
+                    cpt++;
+                }
+            }
+            result.add(sum/cpt);
+        }
+
+        vect = result;
+
+
+        // add 9 values in feature vector
+
+
+    }
+
+
     /**
      * Initialize or update the vector of features
      */

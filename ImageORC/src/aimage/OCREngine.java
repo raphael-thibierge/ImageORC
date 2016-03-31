@@ -173,8 +173,15 @@ public class OCREngine {
         listeImgReference = createListeImage(path);
         for (OCRImage image : listeImgReference){
             //image.setFeatureNdg();
-            image.setFeatureProfilHV();
+            //image.setFeatureProfilHV();
             //image.rapportIso();
+            image.zonning();
+        }
+    }
+
+    private void setZonning(){
+        for (OCRImage image : listeImg){
+            image.zonning();
         }
     }
 
@@ -183,8 +190,11 @@ public class OCREngine {
      */
     public void makeDecisionOnImageList(){
         //setFeatureNdgVect();
-        setFeatureHVVect();
+        //setFeatureHVVect();
         //setIsoperimeter();
+
+        setZonning();
+
 
         ArrayList<ArrayList<Double>> ref = new ArrayList<>();
         for (OCRImage referenceImage : listeImgReference) {
