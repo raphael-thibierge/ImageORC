@@ -203,10 +203,9 @@ public class OCRImage {
 
     public void zonning(){
 
-        byte[] pixels = (byte[]) img.getProcessor().getPixels();
+        refreshPixelsArray();
 
-        // make 9 zone of the image ( 3x3 )
-        int nbZones = 3;
+        int nbZones = 5;
         int size = pixels.length / nbZones;
         if (size * nbZones < pixels.length){
             size += 1;
