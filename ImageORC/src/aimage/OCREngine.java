@@ -141,8 +141,7 @@ public class OCREngine {
     /**
      * Set feature caracteristic vector for all images from listeImage
      */
-    public void setFeatureNdgVect()
-    {
+    public void setFeatureNdgVect() {
         for (int i = 0; i < listeImg.size(); i++) {
             listeImg.get(i).setFeatureNdg();
         }

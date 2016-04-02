@@ -46,6 +46,7 @@ public class OCRImage {
         this.img = img;
         this.label = label;
         this.path = path;
+        this.vect = new ArrayList<>();
     }
 
     /**
@@ -54,7 +55,7 @@ public class OCRImage {
      */
     public ArrayList<Double> getProfilH(){
         ArrayList<Double> profilH = new ArrayList<>();
-        byte[] pixels = (byte[]) img.getProcessor().getPixels();
+        refreshPixelsArray();
 
         for(int i=0; i < img.getHeight(); i++){
             double average = 0.0;
@@ -74,7 +75,7 @@ public class OCRImage {
      */
     public ArrayList<Double> getProfilV(){
         ArrayList<Double> profilV = new ArrayList<>();
-        byte[] pixels = (byte[]) img.getProcessor().getPixels();
+        refreshPixelsArray();
 
         for(int i=0; i < img.getWidth(); i++){
             double average = 0.0;
@@ -92,8 +93,6 @@ public class OCRImage {
      * Set the vector of features with vertical profile and horizontal profile
      */
     public void setFeatureProfilHV(){
-        vect = new ArrayList<>();
-
         vect.addAll(getProfilV());
         vect.addAll(getProfilH());
     }
@@ -122,7 +121,8 @@ public class OCRImage {
                     boolean find = false;
                     for(int x=-1; x<=1 && !find; x++){
                         for(int y=-1; y<=1 && !find; y++){
-                            if( i+x >= 0 && i+x < img.getWidth() && j+y >= 0 && j+y < img.getHeight()
+                            if( i+x >= 0 && i+x < img.getWidth()
+                                    && j+y >= 0 && j+y < img.getHeight()
                                     && getP(i+x, j+y) == 255){
                                 find = true;
                                 perimeter += 1.0;
@@ -133,10 +133,8 @@ public class OCRImage {
             }
         }
 
-        double r = perimeter / (4.0 * Math.PI * surface);
-
-        vect = new ArrayList<>();
-        vect.add(r);
+        double result = perimeter / (4.0 * Math.PI * surface);
+        vect.add(result);
     }
 
     /**
@@ -153,7 +151,6 @@ public class OCRImage {
                 } else {
                     setP(i,j,255);
                 }
-
             }
         }
     }
@@ -175,7 +172,7 @@ public class OCRImage {
     }
 
     /**
-     * @param i colum
+     * @param i column
      * @param j line
      * @param value new value of the pixel
      */
@@ -188,8 +185,7 @@ public class OCRImage {
      * @return average
      */
     public double averageNdg(){
-        // get pixels
-        byte[] pixels = (byte[]) img.getProcessor().getPixels();
+       refreshPixelsArray();
 
         double sum = 0;
         // sum of all pixels
@@ -200,19 +196,21 @@ public class OCRImage {
         return sum/(double)pixels.length;
     }
 
-
+    /**
+     * Divide image in 5 zones and compute averageNDG on each zone
+     */
     public void zonning(){
 
         refreshPixelsArray();
 
-        int nbZones = 5;
+        int nbZones = 200;
         int size = pixels.length / nbZones;
         if (size * nbZones < pixels.length){
             size += 1;
         }
 
         // average on each zone
-        ArrayList<Double> result = new ArrayList<>();
+        ArrayList<Double> results = new ArrayList<>();
         for (int i = 0; i < nbZones; i++){
 
             double sum = 0;
@@ -224,23 +222,18 @@ public class OCRImage {
                     cpt++;
                 }
             }
-            result.add(sum/cpt);
+            results.add(sum/cpt);
         }
 
-        vect = result;
-
-
-        // add 9 values in feature vector
-
-
+        // add results in features vector
+        vect.addAll(results);
     }
-
 
     /**
      * Initialize or update the vector of features
      */
     public void setFeatureNdg(){
-        vect = new ArrayList<>();
+        //vect = new ArrayList<>();
         vect.add(averageNdg());
     }
 
